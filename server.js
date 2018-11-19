@@ -1,7 +1,5 @@
 
 // TODO:
-// static file serving
-// multiple url route
 // submit button: ajax, get method, json data type
 // handlebar render
 // f2f logic
@@ -24,19 +22,21 @@ const logger = require('morgan') //test
 const PORT = process.env.PORT || 3000
 const ROOT_DIR = '/public'; //root directory for our static pages
 const API_KEY = '5e8648501d84d62c45e87fc486e8f655'
+const REGEX = /^\/(recipes|index)?(?:\.html)?$/
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'jade');
 
 //Middleware
-app.use(logger('dev'))  //test
+// app.use(logger('dev'))  //test
 // app.use(express.json());
 // app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, ROOT_DIR))) //provide static server
 
 //Routes
-app.get('/', function(req, res) {
+app.get(REGEX, function(req, res) {
+  console.log('req:',req.query)
   res.sendFile(path.join(__dirname, ROOT_DIR, 'index.html'))
 })
 
