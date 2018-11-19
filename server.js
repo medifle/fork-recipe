@@ -1,10 +1,16 @@
 
 // TODO:
-// multiple url route, static file serving
+// static file serving
+// multiple url route
+// submit button: ajax, get method, json data type
 // handlebar render
 // f2f logic
 // R1.6 R2.1 R3.1 R3.2 R3.3 R3.4 R3.5 R3.6 R3.7
 //
+
+// test:
+// post method xhr
+
 // cleanup:
 // uninstall morgan
 // delete node_modules directory
@@ -12,6 +18,7 @@
 const express = require('express')
 const app = express()
 const path = require('path')
+const request = require('request') //npm module for easy http requests
 const logger = require('morgan') //test
 
 const PORT = process.env.PORT || 3000
@@ -24,13 +31,20 @@ app.set('views', path.join(__dirname, 'views'));
 
 //Middleware
 app.use(logger('dev'))  //test
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, ROOT_DIR))) //provide static server
 
 //Routes
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname, ROOT_DIR, 'index.html'))
+})
 
+//Error handler
+// if this middleware is triggered, it seems file not found
 app.use(function(req, res) {
-//   res.status(404).render("404");
-  res.status(404).send("404 NOT FOUND");
+//   res.status(404).render('404');
+  res.status(404).send('404 NOT FOUND');
 
 });
 
