@@ -1,9 +1,33 @@
-
 (function() {
   const form = document.getElementById('form')
   const recipe = document.getElementById('recipe')
   const h1 = document.querySelector('h1')
   const container = document.querySelector('.container')
+
+  // create and append html tags to '.container'
+  function renderRecipe(xhrResponse) {
+    const recipeArray = xhrResponse.recipes
+    recipeArray.forEach(element => {
+      // create html a tag
+      let a = document.createElement('a')
+      a.className = 'link'
+      a.href = element.f2f_url
+      a.target = '_blank'
+      // create html div tag
+      let div = document.createElement('div')
+      div.className = 'cover-wrap'
+      div.style.backgroundImage = `url(${element.image_url})`
+      // create html p tag
+      let p = document.createElement('p')
+      p.className = 'title'
+      let pNode = document.createTextNode(element.title)
+      p.appendChild(pNode)
+      // append div and p tags, then append a to container
+      a.appendChild(div)
+      a.appendChild(p)
+      container.appendChild(a)
+    })
+  }
 
   function getRecipe(e) {
     recipeName = recipe.value.trim()
@@ -17,8 +41,9 @@
     xhr.onreadystatechange = () => {
       if (xhr.readyState == 4 && xhr.status == 200) {
         let response = JSON.parse(xhr.responseText)
-        container.innerHTML = response.recipes
         h1.textContent = `Enjoy your recipes!`
+        console.log(response)
+        renderRecipe(response)
       }
     }
     xhr.open('POST', `/ingredients`)
@@ -28,6 +53,7 @@
     e.preventDefault()
     e.stopPropagation()
   }
+
 
   // start after DOM is ready
   document.addEventListener('DOMContentLoaded', () => {

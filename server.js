@@ -1,9 +1,3 @@
-// TODO:
-// R1.6 R3.2 R3.5
-// pass to client JSON data instead of parsed HTML
-
-// cleanup:
-// delete node_modules directory
 
 const express = require('express')
 const app = express()
@@ -11,14 +5,13 @@ const path = require('path')
 const request = require('request') //npm module for easy http requests
 const exphbs = require('express-handlebars')
 
-
 const PORT = process.env.PORT || 3000
 const ROOT_DIR = '/public' //root directory for our static pages
-const API_KEY = '5e8648501d84d62c45e87fc486e8f655'
-const REGEX = /^\/(recipes|index)?(?:\.html)?$/ //route all valid path to one page
+const API_KEY = 'c043a325cbd65a83c55a08416ec28e87' //or '5e8648501d84d62c45e87fc486e8f655'
+const REGEX = /^\/(recipes|index)?(?:\.html)?$/ //route all valid path
 
 
-// view engine setup
+// View Engine setup
 const hbs = exphbs.create({
   extname: '.hbs',
   defaultLayout: 'main'
@@ -27,64 +20,44 @@ app.engine('.hbs', hbs.engine)
 app.set('view engine', '.hbs')
 
 
-//Middleware
-app.use(express.json())
-// app.use(express.urlencoded({ extended: false }))
+// Middleware
+app.use(express.json()) //get body payload for post method in express
 app.use(express.static(path.join(__dirname, ROOT_DIR))) //provide static server
 
-function getRecipes(ingredient, req, res, next) {
+function getRecipes(ingredient, req, res) {
   request(
     `https://www.food2fork.com/api/search?q=${ingredient}&key=${API_KEY}`, { json: true },
     function(error, response, body) {
       if (error) console.log(error)
       if (!error && response.statusCode == 200) {
         res.locals.context = body
-        // console.log('resLocalsf2f', res.locals) //test
-        if (req.method === 'POST') {
-          renderRecipe2(res, next)
-        }
         if (req.method === 'GET') {
           res.render('query', body)
         }
+        if (req.method === 'POST') {
+          res.json(body)
+        }
       }
     })
 }
 
-function renderRecipe2(res, next) {
-  // console.log("reach renderRecipe2", res.locals.context) //test
-  hbs.render('views/partials/recipe.hbs', res.locals.context).then(function(result) {
-      if (result.length) {
-        // console.log('111') //test
-        res.locals.recipes = result
-      }
-      setImmediate(next)
-      // next()
-    })
-    .catch(next)
-}
-
-//Routes
-app.get(REGEX, (req, res, next) => {
+// Routes
+app.get(REGEX, (req, res) => {
   console.log('req query:', req.query)
   if (req.query.ingredients) {
-    getRecipes(req.query.ingredients, req, res, next)
+    getRecipes(req.query.ingredients, req, res)
     return
   }
   res.render('index')
 })
 
-// handle submit from user input
-app.post('/ingredients', function(req, res, next) {
+// handle user submit from Go button
+app.post('/ingredients', function(req, res) {
     console.log('reqbody', req.body)
-    getRecipes(req.body.ingredient, req, res, next)
-  },
-  // renderRecipe,
-  function(req, res) {
-    // console.log('222') //test
-    res.json({ recipes: res.locals.recipes })
+    getRecipes(req.body.ingredient, req, res)
   })
 
-//Error handler
+// Error handler
 // if this middleware is triggered, it seems file not found
 app.use(function(req, res) {
   res.status(404).render('404');
