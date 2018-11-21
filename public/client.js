@@ -12,11 +12,12 @@
       let a = document.createElement('a')
       a.className = 'link'
       a.href = element.f2f_url
+      a.href = 'https://' + a.href
       a.target = '_blank'
       // create html div tag
       let div = document.createElement('div')
       div.className = 'cover-wrap'
-      div.style.backgroundImage = `url(${element.image_url})`
+      div.style.backgroundImage = `url(https://${element.image_url.slice(7)})`
       // create html p tag
       let p = document.createElement('p')
       p.className = 'title'
@@ -41,7 +42,7 @@
     xhr.onreadystatechange = () => {
       if (xhr.readyState == 4 && xhr.status == 200) {
         let response = JSON.parse(xhr.responseText)
-        console.log(response)
+        // console.log(response)
         if (response.error === "limit") {
           h1.textContent = 'Max query hit, please come tomorrow :)'
           return
