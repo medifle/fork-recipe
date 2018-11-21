@@ -11,8 +11,7 @@
       // create html a tag
       let a = document.createElement('a')
       a.className = 'link'
-      a.href = element.f2f_url
-      a.href = 'https://' + a.href
+      a.href = `https://${element.f2f_url.slice(7)}`
       a.target = '_blank'
       // create html div tag
       let div = document.createElement('div')
