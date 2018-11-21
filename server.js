@@ -8,7 +8,7 @@ const exphbs = require('express-handlebars')
 const PORT = process.env.PORT || 3000
 const ROOT_DIR = '/public' //root directory for our static pages
 const REGEX = /^\/(recipes|index)?(?:\.html)?$/ //route all valid path
-const API_KEY = ['c043a325cbd65a83c55a08416ec28e87', '5e8648501d84d62c45e87fc486e8f655']
+const API_KEY = ['c043a325cbd65a83c55a08416ec28e87', '5e8648501d84d62c45e87fc486e8f655'] //free keys, please don't abuse them
 let api_counter = 0
 
 // View Engine setup
@@ -58,7 +58,6 @@ app.get(REGEX, (req, res) => {
   }
   res.render('index')
 })
-
 // handle user submit from Go button
 app.post('/ingredients', function(req, res) {
     console.log('reqbody', req.body)
@@ -71,7 +70,7 @@ app.use(function(req, res) {
   res.status(404).render('404');
 });
 
-//start server
+// Start server
 app.listen(PORT, (err) => {
   if (err) console.log(err)
   console.log(`Server is listening on PORT ${PORT} CNTL-C to quit`)
