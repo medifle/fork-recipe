@@ -8,7 +8,7 @@ const exphbs = require('express-handlebars')
 const PORT = process.env.PORT || 3000
 const ROOT_DIR = '/public' //root directory for our static pages
 const REGEX = /^\/(recipes|index)?(?:\.html)?$/ //route all valid path
-const API_KEY = ['c043a325cbd65a83c55a08416ec28e87', '5e8648501d84d62c45e87fc486e8f655'] //free keys, please don't abuse them
+const API_KEY = ['c043a325cbd65a83c55a08416ec28e87', '5e8648501d84d62c45e87fc486e8f655', '5b60b4de639dd928b9b2e2611712ccf2'] //free keys, please don't abuse them
 let api_counter = 0
 
 // View Engine setup
