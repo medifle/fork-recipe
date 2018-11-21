@@ -1,3 +1,3 @@
 # Introduction
 
-Recipe-fork is a tiny get-your-recipe Web Application.
+Fork-recipe is a tiny get-your-recipe Web Application.
