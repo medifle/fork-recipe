@@ -18,6 +18,10 @@ a {
   text-decoration: none;
 }
 
+#recipe {
+  width: 200px;
+}
+
 .container {
   display: flex;
 	margin: 0 auto;
