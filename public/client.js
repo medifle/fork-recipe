@@ -41,8 +41,12 @@
     xhr.onreadystatechange = () => {
       if (xhr.readyState == 4 && xhr.status == 200) {
         let response = JSON.parse(xhr.responseText)
-        h1.textContent = `Enjoy your recipes!`
         console.log(response)
+        if (response.error === "limit") {
+          h1.textContent = 'Max query hit, please come tomorrow :)'
+          return
+        }
+        h1.textContent = `Enjoy your recipes!`
         renderRecipe(response)
       }
     }

@@ -1,0 +1,17 @@
+{
+  "name": "recipe-fork",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Get your favourite recipe in a second",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "medifle",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.4",
+    "express-handlebars": "^3.0.0",
+    "request": "^2.88.0"
+  }
+}

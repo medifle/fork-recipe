@@ -7,9 +7,9 @@ const exphbs = require('express-handlebars')
 
 const PORT = process.env.PORT || 3000
 const ROOT_DIR = '/public' //root directory for our static pages
-const API_KEY = 'c043a325cbd65a83c55a08416ec28e87' //or '5e8648501d84d62c45e87fc486e8f655'
 const REGEX = /^\/(recipes|index)?(?:\.html)?$/ //route all valid path
-
+const API_KEY = ['c043a325cbd65a83c55a08416ec28e87', '5e8648501d84d62c45e87fc486e8f655']
+let api_counter = 0
 
 // View Engine setup
 const hbs = exphbs.create({
@@ -26,11 +26,19 @@ app.use(express.static(path.join(__dirname, ROOT_DIR))) //provide static server
 
 function getRecipes(ingredient, req, res) {
   request(
-    `https://www.food2fork.com/api/search?q=${ingredient}&key=${API_KEY}`, { json: true },
+    `https://www.food2fork.com/api/search?q=${ingredient}&key=${API_KEY[api_counter]}`, { json: true },
     function(error, response, body) {
-      if (error) console.log(error)
+      if (error) console.log(error, body)
       if (!error && response.statusCode == 200) {
-        res.locals.context = body
+        // if a key usage runs out, try another key
+        if (body.error === 'limit') {
+          if (api_counter !== API_KEY.length-1) {
+            api_counter += 1
+            console.log('try another key', API_KEY[api_counter], api_counter)
+            getRecipes(ingredient, req, res)
+            return
+          }
+        }
         if (req.method === 'GET') {
           res.render('query', body)
         }
