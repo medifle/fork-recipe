@@ -26,7 +26,7 @@ app.set('view engine', '.hbs')
 app.use(express.json()) //get body payload for post method in express
 app.use(express.static(path.join(__dirname, ROOT_DIR))) //provide static server
 
-function getRecipes(ingredient, req, res) {
+const getRecipes = (ingredient, req, res) => {
   request(
     `https://www.food2fork.com/api/search?q=${ingredient}&key=${
       API_KEY[api_counter]
@@ -44,9 +44,11 @@ function getRecipes(ingredient, req, res) {
             return
           }
         }
+        // handle url query
         if (req.method === 'GET') {
           res.render('query', body)
         }
+        // handle query from 'submit' button
         if (req.method === 'POST') {
           res.json(body)
         }
