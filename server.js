@@ -86,4 +86,6 @@ app.listen(PORT, err => {
   console.log(`http://localhost:3000/index.html`)
   console.log(`http://localhost:3000/`)
   console.log(`http://localhost:3000`)
+  console.log(`http://localhost:3000/index.html?ingredients=basil`)
+  console.log(`http://localhost:3000/?ingredients=basil`)
 })
