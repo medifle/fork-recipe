@@ -41,7 +41,6 @@
     xhr.onreadystatechange = () => {
       if (xhr.readyState === 4) {
         if (xhr.status === 200) {
-          console.log(xhr)
           let response = JSON.parse(xhr.responseText)
           // (Food2Fork)
           if (response.error === 'limit') {
