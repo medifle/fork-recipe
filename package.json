@@ -10,8 +10,12 @@
   "author": "medifle",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.16.4",
-    "express-handlebars": "^3.0.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^3.1.0",
+    "lodash": "^4.17.15",
     "request": "^2.88.0"
+  },
+  "devDependencies": {
+    "prettier": "1.19.1"
   }
 }
