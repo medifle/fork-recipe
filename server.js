@@ -62,6 +62,11 @@ const getRecipes = (ingredient, req, res) => {
         }
         // handle GET query by browser
         else if (req.method === 'GET') {
+          // replace http with https for source url
+          body.recipes.forEach(recipe => {
+            recipe.source_url = `https://${recipe.source_url.slice(7)}`
+          })
+
           res.render('query', body)
         }
         // handle POST query from 'Go' button
@@ -89,7 +94,7 @@ app.get(REGEX, async (req, res) => {
       await getRecipes(req.query.ingredients, req, res)
     } catch (e) {
       logError(e)
-      res.status(502).end()
+      res.status(502).json({errorCode: 502, errorMessage: e.message})
     }
   } else {
     res.render('index')
@@ -103,7 +108,7 @@ app.post('/ingredients', async (req, res) => {
     await getRecipes(req.body.ingredient, req, res)
   } catch (e) {
     logError(e)
-    res.status(502).end()
+    res.status(502).json({errorCode: 502, errorMessage: e.message})
   }
 })
 
