@@ -1,5 +1,5 @@
 const util = require('util')
-const request = util.promisify(require('request')) //npm module for easy http requests, promise version
+const request = util.promisify(require('request')) // npm module for easy http requests, promise version
 const _ = require('lodash')
 const ResponseError = require('./Error').ResponseError
 const express = require('express')
@@ -8,14 +8,12 @@ const path = require('path')
 const exphbs = require('express-handlebars')
 
 const PORT = process.env.PORT || 3000
-const ROOT_DIR = '/public' //root directory for our static pages
-const REGEX = /^\/(recipes|index)?(?:\.html)?$/ //route all valid path
-const BASE_URL = 'https://www.food2fork.com/api'
-const API_KEY = [
-  'c043a325cbd65a83c55a08416ec28e87',
-  '5e8648501d84d62c45e87fc486e8f655',
-  '5b60b4de639dd928b9b2e2611712ccf2'
-] //free keys, please don't abuse them
+const ROOT_DIR = '/public' // root directory for our static pages
+const REGEX = /^\/(recipes|index)?(?:\.html)?$/ // route all valid path
+const BASE_URL = 'https://recipesapi.herokuapp.com/api'
+
+// (Food2Fork) To maximize the request limit per day by switching between multiple free keys
+const API_KEY = ['']
 let api_counter = 0
 
 const logError = e => {
@@ -48,12 +46,13 @@ const getRecipes = (ingredient, req, res) => {
       json: true
     }
   )
-    .then((response, body) => {
+    .then(response => {
       if (response.statusCode === 200) {
+        const body = response.body
         if (!_.isObject(body)) {
           throw new ResponseError('Invalid Response body', body)
         }
-        // (Food2fork) if a key usage runs out, try another key
+        // (Food2Fork) if a key usage runs out, try another key
         else if (body.error === 'limit') {
           if (api_counter !== API_KEY.length - 1) {
             api_counter += 1
@@ -97,7 +96,7 @@ app.get(REGEX, async (req, res) => {
   }
 })
 
-// handle user submit from Go button
+// Handle user submit from Go button
 app.post('/ingredients', async (req, res) => {
   console.log('reqBody', req.body)
   try {
